@@ -1,1 +1,1 @@
-# quarkus-petclinic-rest
+# Petclinic Quarkus Backend
