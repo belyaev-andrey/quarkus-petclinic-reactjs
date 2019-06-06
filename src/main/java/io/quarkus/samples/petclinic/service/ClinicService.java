@@ -1,11 +1,14 @@
 package io.quarkus.samples.petclinic.service;
 
 import io.quarkus.samples.petclinic.model.PetType;
+import io.quarkus.samples.petclinic.model.Specialty;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @ApplicationScoped
@@ -32,5 +35,25 @@ public class ClinicService {
     @Transactional
     public void deletePetType(PetType petType) {
         em.remove(em.merge(petType));
+    }
+
+    @Transactional
+    public Collection<Specialty> findAllSpecialties() {
+        return em.createNamedQuery("Specialties.findAll", Specialty.class).getResultList();
+    }
+
+    @Transactional
+    public Specialty findSpecialtyById(Integer specialtyId) {
+        return em.find(Specialty.class, specialtyId);
+    }
+
+    @Transactional
+    public void saveSpecialty(Specialty specialty) {
+        em.persist(em.merge(specialty));
+    }
+
+    @Transactional
+    public void deleteSpecialty(Specialty specialty) {
+        em.remove(em.merge(specialty));
     }
 }

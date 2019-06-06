@@ -1,8 +1,10 @@
 package io.quarkus.samples.petclinic.rest;
 
 import io.quarkus.samples.petclinic.model.PetType;
+import io.quarkus.samples.petclinic.security.Roles;
 import io.quarkus.samples.petclinic.service.ClinicService;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -20,14 +22,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Path("api/pettypes")
-@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+@Produces(MediaTypes.APPLICATION_JSON_UTF8)
+@Consumes(MediaTypes.APPLICATION_JSON_UTF8)
 public class PetTypesResource {
 
     @Inject
     ClinicService clinicService;
 
     @GET
+    @RolesAllowed({Roles.OWNER_ADMIN, Roles.VET_ADMIN})
     public Response getAllPetTypes(){
         Collection<PetType> petTypes = new ArrayList<>(this.clinicService.findAllPetTypes());
         if (petTypes.isEmpty()) {
@@ -38,6 +41,7 @@ public class PetTypesResource {
 
     @GET
     @Path("/{petTypeId}")
+    @RolesAllowed({Roles.OWNER_ADMIN, Roles.VET_ADMIN})
     public Response getPetType(@PathParam("petTypeId") int petTypeId){
         PetType petType = clinicService.findPetTypeById(petTypeId);
         if(petType == null){
@@ -47,6 +51,7 @@ public class PetTypesResource {
     }
 
     @POST
+    @RolesAllowed({Roles.VET_ADMIN})
     public Response addPetType(@Valid PetType petType){
         this.clinicService.savePetType(petType);
         URI uri = URI.create(String.format("/api/pettypes/%s", petType.getId()));
@@ -55,6 +60,7 @@ public class PetTypesResource {
 
     @PUT
     @Path("/{petTypeId}")
+    @RolesAllowed({Roles.VET_ADMIN})
     public Response updatePetType(@PathParam("petTypeId") int petTypeId, @Valid PetType petType){
         PetType currentPetType = this.clinicService.findPetTypeById(petTypeId);
         if(currentPetType == null){
@@ -68,6 +74,7 @@ public class PetTypesResource {
 
     @DELETE
     @Path("/{petTypeId}")
+    @RolesAllowed({Roles.VET_ADMIN})
     public Response deletePetType(@PathParam("petTypeId") int petTypeId){
         PetType petType = this.clinicService.findPetTypeById(petTypeId);
         if(petType == null){

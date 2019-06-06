@@ -32,8 +32,8 @@ public class PetType extends NamedEntity {
     public PetType() {
     }
 
-    public PetType(String name) {
+    public PetType(Integer id, String name) {
+        super.setId(id);
         super.setName(name);
     }
-
 }
