@@ -15,11 +15,14 @@
  */
 package io.quarkus.samples.petclinic.model;
 
+import javax.json.bind.annotation.JsonbProperty;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
 import java.util.ArrayList;
@@ -38,6 +41,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "vets")
+@NamedQuery(name = "Vets.findAll", query = "SELECT v FROM Vet v ORDER BY v.lastName")
 public class Vet extends Person {
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -45,6 +49,7 @@ public class Vet extends Person {
         inverseJoinColumns = @JoinColumn(name = "specialty_id"))
     private Set<Specialty> specialties;
     
+    @JsonbTransient
     protected Set<Specialty> getSpecialtiesInternal() {
         if (this.specialties == null) {
             this.specialties = new HashSet<>();
@@ -56,11 +61,13 @@ public class Vet extends Person {
         this.specialties = specialties;
     }
 
-    @XmlElement
+    @JsonbProperty
     public List<Specialty> getSpecialties() {
         List<Specialty> sortedSpecs = new ArrayList<>(getSpecialtiesInternal());
         return Collections.unmodifiableList(sortedSpecs);
     }
+
+    @JsonbTransient
     public int getNrOfSpecialties() {
         return getSpecialtiesInternal().size();
     }

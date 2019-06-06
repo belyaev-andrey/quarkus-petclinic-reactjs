@@ -2,6 +2,7 @@ package io.quarkus.samples.petclinic.service;
 
 import io.quarkus.samples.petclinic.model.PetType;
 import io.quarkus.samples.petclinic.model.Specialty;
+import io.quarkus.samples.petclinic.model.Vet;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -55,5 +56,25 @@ public class ClinicService {
     @Transactional
     public void deleteSpecialty(Specialty specialty) {
         em.remove(em.merge(specialty));
+    }
+
+    @Transactional
+    public Collection<Vet> findAllVets() {
+        return em.createNamedQuery("Vets.findAll", Vet.class).getResultList();
+    }
+
+    @Transactional
+    public Vet findVetById(Integer vetId) {
+        return em.find(Vet.class, vetId);
+    }
+
+    @Transactional
+    public void saveVet(Vet vet) {
+        em.persist(em.merge(vet));
+    }
+
+    @Transactional
+    public void deleteVet(Vet vet) {
+        em.remove(em.merge(vet));
     }
 }
