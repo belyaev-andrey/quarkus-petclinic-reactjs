@@ -15,12 +15,14 @@
  */
 package io.quarkus.samples.petclinic.model;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -41,6 +43,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "pets")
+@NamedQuery(name = "Pets.findAll", query = "SELECT p FROM Pet p ORDER BY p.name")
 public class Pet extends NamedEntity {
 
     @Column(name = "birth_date")
@@ -83,6 +86,7 @@ public class Pet extends NamedEntity {
         this.owner = owner;
     }
 
+    @JsonbTransient
     protected Set<Visit> getVisitsInternal() {
         if (this.visits == null) {
             this.visits = new HashSet<>();
