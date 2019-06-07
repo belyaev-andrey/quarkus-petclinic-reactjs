@@ -24,16 +24,16 @@ import java.util.Collection;
 @Path("api/vets")
 @Produces(MediaTypes.APPLICATION_JSON_UTF8)
 @Consumes(MediaTypes.APPLICATION_JSON_UTF8)
-public class VetResource {
+public class VetsResource {
 
     @Inject
     ClinicService clinicService;
 
     @GET
     @RolesAllowed(Roles.VET_ADMIN)
-    public Response getAllSpecialtys(){
+    public Response getAllSpecialtys() {
         Collection<Vet> vets = new ArrayList<>(clinicService.findAllVets());
-        if (vets.isEmpty()){
+        if (vets.isEmpty()) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         return Response.ok(vets).build();
@@ -42,9 +42,9 @@ public class VetResource {
     @GET
     @Path("/{vetId}")
     @RolesAllowed(Roles.VET_ADMIN)
-    public Response getVet(@PathParam("vetId") int vetId){
+    public Response getVet(@PathParam("vetId") int vetId) {
         Vet vet = clinicService.findVetById(vetId);
-        if(vet == null){
+        if (vet == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         return Response.ok(vet).build();
@@ -52,7 +52,7 @@ public class VetResource {
 
     @POST
     @RolesAllowed(Roles.VET_ADMIN)
-    public Response addVet(@Valid Vet vet){
+    public Response addVet(@Valid Vet vet) {
         clinicService.saveVet(vet);
         URI uri = URI.create(String.format("api/vets/%s", vet.getId()));
         return Response.ok(vet).location(uri).status(Response.Status.CREATED).build();
@@ -61,15 +61,15 @@ public class VetResource {
     @PUT
     @Path("/{vetId}")
     @RolesAllowed(Roles.VET_ADMIN)
-    public Response updateVet(@PathParam("vetId") int vetId, @Valid Vet vet){
+    public Response updateVet(@PathParam("vetId") int vetId, @Valid Vet vet) {
         Vet currentVet = clinicService.findVetById(vetId);
-        if(currentVet == null){
+        if (currentVet == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         currentVet.setFirstName(vet.getFirstName());
         currentVet.setLastName(vet.getLastName());
         currentVet.clearSpecialties();
-        for(Specialty spec : vet.getSpecialties()) {
+        for (Specialty spec : vet.getSpecialties()) {
             currentVet.addSpecialty(spec);
         }
         clinicService.saveVet(currentVet);
@@ -80,12 +80,12 @@ public class VetResource {
     @DELETE
     @Path("/{vetId}")
     @RolesAllowed(Roles.VET_ADMIN)
-    public Response deleteSpecialty(@PathParam("vetId") int vetId){
-        Vet vet = this.clinicService.findVetById(vetId);
-        if(vet == null){
+    public Response deleteSpecialty(@PathParam("vetId") int vetId) {
+        Vet vet = clinicService.findVetById(vetId);
+        if (vet == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        this.clinicService.deleteVet(vet);
+        clinicService.deleteVet(vet);
         return Response.noContent().build();
     }
 

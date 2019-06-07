@@ -4,11 +4,9 @@ import io.quarkus.samples.petclinic.model.Pet;
 import io.quarkus.samples.petclinic.model.PetType;
 import io.quarkus.samples.petclinic.security.Roles;
 import io.quarkus.samples.petclinic.service.ClinicService;
-import jdk.nashorn.internal.objects.annotations.Getter;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -24,7 +22,7 @@ import java.util.Collection;
 
 @Path("api/pets")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-public class PetResource {
+public class PetsResource {
 
     @Inject
     ClinicService clinicService;

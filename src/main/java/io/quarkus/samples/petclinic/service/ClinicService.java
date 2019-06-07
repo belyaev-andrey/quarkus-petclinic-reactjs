@@ -1,5 +1,6 @@
 package io.quarkus.samples.petclinic.service;
 
+import io.quarkus.samples.petclinic.model.Owner;
 import io.quarkus.samples.petclinic.model.Pet;
 import io.quarkus.samples.petclinic.model.PetType;
 import io.quarkus.samples.petclinic.model.Specialty;
@@ -24,7 +25,7 @@ public class ClinicService {
         return em.createNamedQuery("PetTypes.findAll", PetType.class).getResultList();
     }
 
-    public PetType findPetTypeById(int petTypeId) {
+    public PetType findPetTypeById(Integer petTypeId) {
         return em.find(PetType.class, petTypeId);
     }
 
@@ -82,5 +83,29 @@ public class ClinicService {
 
     public void deletePet(Pet pet) {
         em.remove(em.merge(pet));
+    }
+
+    public Collection<Owner> findOwnerByLastName(String ownerLastName) {
+        return em.createNamedQuery("Owners.findByLastName", Owner.class)
+                .setParameter("lastName", ownerLastName)
+                .getResultList();
+    }
+
+    public Collection<Owner> findAllOwners() {
+        return em.createNamedQuery("Owners.findAll", Owner.class)
+                .getResultList();
+    }
+
+    public Owner findOwnerById(Integer ownerId) {
+        return em.find(Owner.class, ownerId);
+    }
+
+
+    public void saveOwner(Owner owner) {
+        em.persist(em.merge(owner));
+    }
+
+    public void deleteOwner(Owner owner) {
+        em.remove(em.merge(owner));
     }
 }

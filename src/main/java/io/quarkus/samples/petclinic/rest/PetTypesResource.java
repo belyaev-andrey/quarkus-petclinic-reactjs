@@ -15,7 +15,6 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ public class PetTypesResource {
     @GET
     @RolesAllowed({Roles.OWNER_ADMIN, Roles.VET_ADMIN})
     public Response getAllPetTypes(){
-        Collection<PetType> petTypes = new ArrayList<>(this.clinicService.findAllPetTypes());
+        Collection<PetType> petTypes = new ArrayList<>(clinicService.findAllPetTypes());
         if (petTypes.isEmpty()) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
@@ -53,7 +52,7 @@ public class PetTypesResource {
     @POST
     @RolesAllowed({Roles.VET_ADMIN})
     public Response addPetType(@Valid PetType petType){
-        this.clinicService.savePetType(petType);
+        clinicService.savePetType(petType);
         URI uri = URI.create(String.format("/api/pettypes/%s", petType.getId()));
         return Response.ok(petType).location(uri).status(Response.Status.CREATED).build();
     }
@@ -62,12 +61,12 @@ public class PetTypesResource {
     @Path("/{petTypeId}")
     @RolesAllowed({Roles.VET_ADMIN})
     public Response updatePetType(@PathParam("petTypeId") int petTypeId, @Valid PetType petType){
-        PetType currentPetType = this.clinicService.findPetTypeById(petTypeId);
+        PetType currentPetType = clinicService.findPetTypeById(petTypeId);
         if(currentPetType == null){
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         currentPetType.setName(petType.getName());
-        this.clinicService.savePetType(currentPetType);
+        clinicService.savePetType(currentPetType);
         return Response.ok(currentPetType).status(Response.Status.NO_CONTENT).build();
     }
 
@@ -76,11 +75,11 @@ public class PetTypesResource {
     @Path("/{petTypeId}")
     @RolesAllowed({Roles.VET_ADMIN})
     public Response deletePetType(@PathParam("petTypeId") int petTypeId){
-        PetType petType = this.clinicService.findPetTypeById(petTypeId);
+        PetType petType = clinicService.findPetTypeById(petTypeId);
         if(petType == null){
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        this.clinicService.deletePetType(petType);
+        clinicService.deletePetType(petType);
         return Response.noContent().build();
     }
 

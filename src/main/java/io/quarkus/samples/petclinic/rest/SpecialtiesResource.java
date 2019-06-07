@@ -6,7 +6,6 @@ import io.quarkus.samples.petclinic.service.ClinicService;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -16,7 +15,6 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.util.ArrayList;
@@ -68,7 +66,7 @@ public class SpecialtiesResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         currentSpecialty.setName(specialty.getName());
-        this.clinicService.saveSpecialty(currentSpecialty);
+        clinicService.saveSpecialty(currentSpecialty);
         return Response.ok(currentSpecialty).status(Response.Status.NO_CONTENT).build();
     }
 
@@ -77,11 +75,11 @@ public class SpecialtiesResource {
     @Path("/{specialtyId}")
     @RolesAllowed(Roles.VET_ADMIN)
     public Response deleteSpecialty(@PathParam("specialtyId") int specialtyId){
-        Specialty specialty = this.clinicService.findSpecialtyById(specialtyId);
+        Specialty specialty = clinicService.findSpecialtyById(specialtyId);
         if(specialty == null){
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        this.clinicService.deleteSpecialty(specialty);
+        clinicService.deleteSpecialty(specialty);
         return Response.noContent().build();
     }
 
