@@ -67,7 +67,7 @@ public class OwnersResource {
     @POST
     @RolesAllowed(Roles.OWNER_ADMIN)
     public Response addOwner(@Valid Owner owner) {
-        clinicService.saveOwner(owner);
+        owner = clinicService.saveOwner(owner);
         URI uri = URI.create(String.format("/api/owners/%s", owner.getId()));
         return Response.ok(owner).location(uri).status(Response.Status.CREATED).build();
     }

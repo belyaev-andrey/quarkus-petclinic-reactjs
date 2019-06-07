@@ -5,13 +5,13 @@ import io.quarkus.samples.petclinic.model.Pet;
 import io.quarkus.samples.petclinic.model.PetType;
 import io.quarkus.samples.petclinic.model.Specialty;
 import io.quarkus.samples.petclinic.model.Vet;
+import io.quarkus.samples.petclinic.model.Visit;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @ApplicationScoped
@@ -29,8 +29,10 @@ public class ClinicService {
         return em.find(PetType.class, petTypeId);
     }
 
-    public void savePetType(PetType petType) {
-        em.persist(em.merge(petType));
+    public PetType savePetType(PetType petType) {
+        petType = em.merge(petType);
+        em.persist(petType);
+        return petType;
     }
 
     public void deletePetType(PetType petType) {
@@ -45,8 +47,10 @@ public class ClinicService {
         return em.find(Specialty.class, specialtyId);
     }
 
-    public void saveSpecialty(Specialty specialty) {
-        em.persist(em.merge(specialty));
+    public Specialty saveSpecialty(Specialty specialty) {
+        specialty = em.merge(specialty);
+        em.persist(specialty);
+        return specialty;
     }
 
     public void deleteSpecialty(Specialty specialty) {
@@ -61,8 +65,10 @@ public class ClinicService {
         return em.find(Vet.class, vetId);
     }
 
-    public void saveVet(Vet vet) {
-        em.persist(em.merge(vet));
+    public Vet saveVet(Vet vet) {
+        vet = em.merge(vet);
+        em.persist(vet);
+        return vet;
     }
 
     public void deleteVet(Vet vet) {
@@ -77,8 +83,10 @@ public class ClinicService {
         return em.createNamedQuery("Pets.findAll", Pet.class).getResultList();
     }
 
-    public void savePet(Pet pet) {
-        em.persist(em.merge(pet));
+    public Pet savePet(Pet pet) {
+        pet = em.merge(pet);
+        em.persist(pet);
+        return pet;
     }
 
     public void deletePet(Pet pet) {
@@ -101,11 +109,31 @@ public class ClinicService {
     }
 
 
-    public void saveOwner(Owner owner) {
-        em.persist(em.merge(owner));
+    public Owner saveOwner(Owner owner) {
+        owner = em.merge(owner);
+        em.persist(owner);
+        return owner;
     }
 
     public void deleteOwner(Owner owner) {
         em.remove(em.merge(owner));
+    }
+
+    public Collection<Visit> findAllVisits() {
+        return em.createNamedQuery("Visits.findAll", Visit.class).getResultList();
+    }
+
+    public Visit findVisitById(Integer visitId) {
+        return em.find(Visit.class, visitId);
+    }
+
+    public Visit saveVisit(Visit visit) {
+        visit = em.merge(visit);
+        em.persist(visit);
+        return visit;
+    }
+
+    public void deleteVisit(Visit visit) {
+        em.remove(em.merge(visit));
     }
 }

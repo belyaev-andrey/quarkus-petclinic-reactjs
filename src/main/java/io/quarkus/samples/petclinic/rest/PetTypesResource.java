@@ -31,7 +31,7 @@ public class PetTypesResource {
     @GET
     @RolesAllowed({Roles.OWNER_ADMIN, Roles.VET_ADMIN})
     public Response getAllPetTypes(){
-        Collection<PetType> petTypes = new ArrayList<>(clinicService.findAllPetTypes());
+        Collection<PetType> petTypes = clinicService.findAllPetTypes();
         if (petTypes.isEmpty()) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
@@ -52,7 +52,7 @@ public class PetTypesResource {
     @POST
     @RolesAllowed({Roles.VET_ADMIN})
     public Response addPetType(@Valid PetType petType){
-        clinicService.savePetType(petType);
+        petType = clinicService.savePetType(petType);
         URI uri = URI.create(String.format("/api/pettypes/%s", petType.getId()));
         return Response.ok(petType).location(uri).status(Response.Status.CREATED).build();
     }

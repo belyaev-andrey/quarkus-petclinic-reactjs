@@ -58,7 +58,7 @@ public class PetsResource {
     @POST
     @RolesAllowed(Roles.OWNER_ADMIN)
     public Response addPet(@Valid Pet pet) {
-        clinicService.savePet(pet);
+        pet = clinicService.savePet(pet);
         URI uri = URI.create(String.format("/api/pets/%s", pet.getId()));
         return Response.ok(pet).location(uri).status(Response.Status.CREATED).build();
     }
@@ -83,11 +83,11 @@ public class PetsResource {
     @Path("/{petId}")
     @RolesAllowed(Roles.OWNER_ADMIN)
     public Response deletePet(@PathParam("petId") int petId) {
-        Pet pet = this.clinicService.findPetById(petId);
+        Pet pet = clinicService.findPetById(petId);
         if (pet == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        this.clinicService.deletePet(pet);
+        clinicService.deletePet(pet);
         return Response.noContent().build();
     }
 

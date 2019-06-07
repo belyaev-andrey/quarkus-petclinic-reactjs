@@ -31,7 +31,7 @@ public class SpecialtiesResource {
     @GET
     @RolesAllowed(Roles.VET_ADMIN)
     public Response getAllSpecialtys(){
-        Collection<Specialty> specialties = new ArrayList<>(clinicService.findAllSpecialties());
+        Collection<Specialty> specialties = clinicService.findAllSpecialties();
         if (specialties.isEmpty()){
             return Response.status(Response.Status.NOT_FOUND).build();
         }
@@ -52,7 +52,7 @@ public class SpecialtiesResource {
     @POST
     @RolesAllowed(Roles.VET_ADMIN)
     public Response addSpecialty(@Valid Specialty specialty){
-        clinicService.saveSpecialty(specialty);
+        specialty = clinicService.saveSpecialty(specialty);
         URI uri = URI.create(String.format("api/specialities/%s", specialty.getId()));
         return Response.ok(specialty).location(uri).status(Response.Status.CREATED).build();
     }

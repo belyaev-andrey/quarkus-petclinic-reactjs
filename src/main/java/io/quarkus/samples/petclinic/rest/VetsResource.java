@@ -32,7 +32,7 @@ public class VetsResource {
     @GET
     @RolesAllowed(Roles.VET_ADMIN)
     public Response getAllSpecialtys() {
-        Collection<Vet> vets = new ArrayList<>(clinicService.findAllVets());
+        Collection<Vet> vets = clinicService.findAllVets();
         if (vets.isEmpty()) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
@@ -53,7 +53,7 @@ public class VetsResource {
     @POST
     @RolesAllowed(Roles.VET_ADMIN)
     public Response addVet(@Valid Vet vet) {
-        clinicService.saveVet(vet);
+        vet = clinicService.saveVet(vet);
         URI uri = URI.create(String.format("api/vets/%s", vet.getId()));
         return Response.ok(vet).location(uri).status(Response.Status.CREATED).build();
     }

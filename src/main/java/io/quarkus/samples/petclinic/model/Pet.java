@@ -15,6 +15,7 @@
  */
 package io.quarkus.samples.petclinic.model;
 
+import javax.json.bind.annotation.JsonbDateFormat;
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -48,6 +49,7 @@ public class Pet extends NamedEntity {
 
     @Column(name = "birth_date")
     @Temporal(TemporalType.DATE)
+    @JsonbDateFormat("yyyy/MM/dd")
     private Date birthDate;
 
     @ManyToOne
