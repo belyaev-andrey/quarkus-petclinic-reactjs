@@ -16,6 +16,7 @@
 package io.quarkus.samples.petclinic.model;
 
 import javax.json.bind.annotation.JsonbDateFormat;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -25,6 +26,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -41,9 +43,8 @@ public class Visit extends BaseEntity {
      * Holds value of property date.
      */
     @Column(name = "visit_date")
-    @Temporal(TemporalType.TIMESTAMP)
     @JsonbDateFormat("yyyy/MM/dd")
-    private Date date;
+    private LocalDate date;
 
     /**
      * Holds value of property description.
@@ -57,6 +58,7 @@ public class Visit extends BaseEntity {
      */
     @ManyToOne
     @JoinColumn(name = "pet_id")
+    @JsonbTransient
     private Pet pet;
 
 
@@ -64,7 +66,7 @@ public class Visit extends BaseEntity {
      * Creates a new instance of Visit for the current date
      */
     public Visit() {
-        this.date = new Date();
+        this.date = LocalDate.now();
     }
 
 
@@ -73,7 +75,7 @@ public class Visit extends BaseEntity {
      *
      * @return Value of property date.
      */
-    public Date getDate() {
+    public LocalDate getDate() {
         return this.date;
     }
 
@@ -82,7 +84,7 @@ public class Visit extends BaseEntity {
      *
      * @param date New value of property date.
      */
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

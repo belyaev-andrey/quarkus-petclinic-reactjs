@@ -15,6 +15,8 @@
  */
 package io.quarkus.samples.petclinic.model;
 
+import org.eclipse.yasson.YassonProperties;
+
 import javax.json.bind.annotation.JsonbDateFormat;
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.CascadeType;
@@ -28,6 +30,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -48,9 +51,8 @@ import java.util.Set;
 public class Pet extends NamedEntity {
 
     @Column(name = "birth_date")
-    @Temporal(TemporalType.DATE)
     @JsonbDateFormat("yyyy/MM/dd")
-    private Date birthDate;
+    private LocalDate birthDate;
 
     @ManyToOne
     @JoinColumn(name = "type_id")
@@ -58,17 +60,18 @@ public class Pet extends NamedEntity {
 
     @ManyToOne
     @JoinColumn(name = "owner_id")
+    @JsonbTransient
     private Owner owner;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pet", fetch = FetchType.EAGER)
     private Set<Visit> visits;
 
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 
-    public Date getBirthDate() {
+    public LocalDate getBirthDate() {
         return this.birthDate;
     }
 

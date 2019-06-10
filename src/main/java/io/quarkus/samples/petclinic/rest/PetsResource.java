@@ -1,5 +1,6 @@
 package io.quarkus.samples.petclinic.rest;
 
+import io.quarkus.samples.petclinic.model.Owner;
 import io.quarkus.samples.petclinic.model.Pet;
 import io.quarkus.samples.petclinic.model.PetType;
 import io.quarkus.samples.petclinic.security.Roles;
@@ -20,33 +21,12 @@ import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.util.Collection;
 
-@Path("api/pets")
+@Path("api")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class PetsResource {
 
     @Inject
     ClinicService clinicService;
-
-    @GET
-    @Path("/{petId}")
-    @RolesAllowed(Roles.OWNER_ADMIN)
-    public Response getPet(@PathParam("petId") int petId) {
-        Pet pet = clinicService.findPetById(petId);
-        if (pet == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        return Response.ok(pet).build();
-    }
-
-    @GET
-    @RolesAllowed(Roles.OWNER_ADMIN)
-    public Response getPets() {
-        Collection<Pet> pets = clinicService.findAllPets();
-        if (pets.isEmpty()) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        return Response.ok(pets).build();
-    }
 
     @GET
     @Path("/pettypes")
@@ -56,15 +36,20 @@ public class PetsResource {
     }
 
     @POST
+    @Path("/owners/{ownerId}/pets")
     @RolesAllowed(Roles.OWNER_ADMIN)
-    public Response addPet(@Valid Pet pet) {
+    public Response addPet(@PathParam("ownerId") int ownerId, @Valid Pet pet) {
+        Owner owner = this.clinicService.findOwnerById(ownerId);
+        if (owner == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        owner.addPet(pet);
         pet = clinicService.savePet(pet);
-        URI uri = URI.create(String.format("/api/pets/%s", pet.getId()));
-        return Response.ok(pet).location(uri).status(Response.Status.CREATED).build();
+        return Response.ok(pet).status(Response.Status.NO_CONTENT).build();
     }
 
     @PUT
-    @Path("/{petId}")
+    @Path("/owners/{ownerId}/pets/{petId}")
     @RolesAllowed(Roles.OWNER_ADMIN)
     public Response updatePet(@PathParam("petId") int petId, @Valid Pet pet) {
         Pet currentPet = clinicService.findPetById(petId);
@@ -74,22 +59,18 @@ public class PetsResource {
         currentPet.setBirthDate(pet.getBirthDate());
         currentPet.setName(pet.getName());
         currentPet.setType(pet.getType());
-        currentPet.setOwner(pet.getOwner());
-        clinicService.savePet(currentPet);
-        return Response.ok(currentPet).status(Response.Status.NO_CONTENT).build();
+        pet = clinicService.savePet(currentPet);
+        return Response.ok(pet).status(Response.Status.NO_CONTENT).build();
     }
 
-    @DELETE
-    @Path("/{petId}")
+    @GET
+    @Path("/owners/{ownerId}/pets/{petId}")
     @RolesAllowed(Roles.OWNER_ADMIN)
-    public Response deletePet(@PathParam("petId") int petId) {
+    public Response getPet(@PathParam("petId") int petId) {
         Pet pet = clinicService.findPetById(petId);
         if (pet == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        clinicService.deletePet(pet);
-        return Response.noContent().build();
+        return Response.ok(pet).build();
     }
-
-
 }

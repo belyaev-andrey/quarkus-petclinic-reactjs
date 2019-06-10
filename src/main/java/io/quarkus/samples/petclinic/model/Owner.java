@@ -44,7 +44,7 @@ import java.util.Set;
 @Table(name = "owners")
 @NamedQueries({
         @NamedQuery(name = "Owners.findAll", query = "select o from Owner o order by o.lastName"),
-        @NamedQuery(name = "Owners.findByLastname", query = "select o from Owner o where o.lastName = :lastName order by o.lastName")
+        @NamedQuery(name = "Owners.findByLastName", query = "select o from Owner o where o.lastName like concat(:lastName, '%') order by o.lastName")
 })
 public class Owner extends Person {
     @Column(name = "address")
