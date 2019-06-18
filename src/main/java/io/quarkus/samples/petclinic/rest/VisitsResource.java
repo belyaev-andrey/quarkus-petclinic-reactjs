@@ -29,7 +29,7 @@ public class VisitsResource {
     public Response addVisit(@PathParam("petId") int petId, @Valid Visit visit){
         final Pet pet = clinicService.findPetById(petId);
         if (pet == null) {
-            return Response.status(404).build();
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
         pet.addVisit(visit);
         clinicService.savePet(pet);

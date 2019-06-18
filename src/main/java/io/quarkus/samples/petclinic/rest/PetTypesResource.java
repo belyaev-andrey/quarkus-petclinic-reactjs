@@ -48,40 +48,4 @@ public class PetTypesResource {
         }
         return Response.ok(petType).build();
     }
-
-    @POST
-    @RolesAllowed({Roles.VET_ADMIN})
-    public Response addPetType(@Valid PetType petType){
-        petType = clinicService.savePetType(petType);
-        URI uri = URI.create(String.format("/api/pettypes/%s", petType.getId()));
-        return Response.ok(petType).location(uri).status(Response.Status.CREATED).build();
-    }
-
-    @PUT
-    @Path("/{petTypeId}")
-    @RolesAllowed({Roles.VET_ADMIN})
-    public Response updatePetType(@PathParam("petTypeId") int petTypeId, @Valid PetType petType){
-        PetType currentPetType = clinicService.findPetTypeById(petTypeId);
-        if(currentPetType == null){
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        currentPetType.setName(petType.getName());
-        clinicService.savePetType(currentPetType);
-        return Response.ok(currentPetType).status(Response.Status.NO_CONTENT).build();
-    }
-
-
-    @DELETE
-    @Path("/{petTypeId}")
-    @RolesAllowed({Roles.VET_ADMIN})
-    public Response deletePetType(@PathParam("petTypeId") int petTypeId){
-        PetType petType = clinicService.findPetTypeById(petTypeId);
-        if(petType == null){
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        clinicService.deletePetType(petType);
-        return Response.noContent().build();
-    }
-
-
 }
