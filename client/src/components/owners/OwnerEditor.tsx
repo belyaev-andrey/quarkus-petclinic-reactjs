@@ -16,7 +16,7 @@ interface IOwnerEditorProps {
 interface IOwnerEditorState {
   owner?: IOwner;
   error?: IError;
-};
+}
 
 export default class OwnerEditor extends React.Component<IOwnerEditorProps, IOwnerEditorState> {
 

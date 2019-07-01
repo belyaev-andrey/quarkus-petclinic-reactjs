@@ -101,3 +101,9 @@ export interface ISpecialty extends INamedEntity {
 export interface IVet extends IPerson {
   specialties: ISpecialty[];
 }
+
+export interface ILogin {
+  username?: string;
+  password?: string;
+  enabled?: boolean;
+}

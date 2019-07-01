@@ -5,14 +5,38 @@ const BACKEND_URL = (typeof __API_SERVER_URL__ === 'undefined' ? 'http://localho
 
 export const url = (path: string): string => `${BACKEND_URL}${path}`;
 
+export interface IHeaderElement {
+    key: string;
+    value: string;
+}
+
+export interface IUser {
+    username: string;
+    authdata: string;
+}
+
+export function authHeader(): string {
+    // return authorization header with basic auth credentials
+    let user = JSON.parse(localStorage.getItem('user'));
+
+    if (user && user.authdata) {
+        return 'Basic ' + user.authdata;
+    } else {
+        return ''; // 'Basic YWRtaW46YWRtaW4=';
+    }
+}
+
+export function pushAuthUser(user: IUser): void {
+    localStorage.setItem('user', JSON.stringify(user));
+}
+
 export const reqHeader = {
     headers: {
         'Accept': 'application/json;charset=utf-8',
         'Content-Type': 'application/json;charset=utf-8',
-        'authorization': 'Basic YWRtaW46YWRtaW4='
+        'Authorization': authHeader()
     }
 };
-
 
 /**
  * path: relative PATH without host and port (i.e. '/api/123')
@@ -25,11 +49,7 @@ export const submitForm = (method: IHttpMethod, path: string, data: any, onSucce
 
     const fetchParams = {
             method: method,
-            headers: {
-                'Accept': 'application/json;charset=utf-8',
-                'Content-Type': 'application/json;charset=utf-8',
-                'authorization': 'Basic YWRtaW46YWRtaW4='
-            },
+            reqHeader,
             body: JSON.stringify
             (data)
         }

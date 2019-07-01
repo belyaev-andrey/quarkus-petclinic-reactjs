@@ -25,7 +25,7 @@ public class VisitsResource {
 
     @POST
     @Path("/owners/{ownerId}/pets/{petId}/visits")
-    @RolesAllowed(Roles.OWNER_ADMIN)
+    @RolesAllowed({Roles.OWNER_ADMIN, Roles.VET_ADMIN})
     public Response addVisit(@PathParam("petId") int petId, @Valid Visit visit){
         final Pet pet = clinicService.findPetById(petId);
         if (pet == null) {
