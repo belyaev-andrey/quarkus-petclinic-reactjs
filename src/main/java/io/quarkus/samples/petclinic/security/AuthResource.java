@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.security.Principal;
 
-@Path("/auth")
+@Path("auth")
 @PermitAll
 @Produces(MediaTypes.APPLICATION_JSON_UTF8)
 @Consumes(MediaTypes.APPLICATION_JSON_UTF8)

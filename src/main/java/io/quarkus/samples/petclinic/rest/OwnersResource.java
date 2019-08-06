@@ -33,7 +33,7 @@ public class OwnersResource {
     public Response addOwner(@Valid Owner owner) {
         owner = clinicService.saveOwner(owner);
         URI uri = URI.create(String.format("/api/owner/%s", owner.getId()));
-        return Response.ok(owner).location(uri).status(Response.Status.CREATED).build();
+        return Response.ok(owner).location(uri).build();
     }
 
     @GET
@@ -77,7 +77,8 @@ public class OwnersResource {
         currentOwner.setLastName(owner.getLastName());
         currentOwner.setTelephone(owner.getTelephone());
         owner = clinicService.saveOwner(currentOwner);
-        return Response.ok(owner).build();
+        URI uri = URI.create(String.format("/api/owner/%s", owner.getId()));
+        return Response.ok(owner).location(uri).build();
     }
 
 }

@@ -16,6 +16,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
+import java.net.URI;
 import java.util.Collection;
 
 @Path("api")
@@ -42,7 +43,8 @@ public class PetsResource {
         }
         owner.addPet(pet);
         pet = clinicService.savePet(pet);
-        return Response.ok(pet).status(Response.Status.NO_CONTENT).build();
+        URI uri = URI.create(String.format("/owners/%s/pets", owner.getId()));
+        return Response.ok(pet).location(uri).build();
     }
 
     @PUT
@@ -57,7 +59,8 @@ public class PetsResource {
         currentPet.setName(pet.getName());
         currentPet.setType(pet.getType());
         pet = clinicService.savePet(currentPet);
-        return Response.ok(pet).status(Response.Status.NO_CONTENT).build();
+        URI uri = URI.create(String.format("/owners/%s/pets/%s", pet.getOwner().getId(), pet.getId()));
+        return Response.ok(pet).location(uri).build();
     }
 
     @GET

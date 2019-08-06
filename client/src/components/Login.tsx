@@ -54,7 +54,7 @@ export default class LoginPage extends React.Component<ILoginProps, ILoginPageSt
         };
         console.log(user);
         pushAuthUser(user);
-        submitForm('POST', 'api/auth', null, ((respStatus, response) => {
+        submitForm('POST', '/api/auth', user, ((respStatus, response) => {
             if (respStatus !== 202) {
                 removeAuthUser();
             }
@@ -67,12 +67,12 @@ export default class LoginPage extends React.Component<ILoginProps, ILoginPageSt
 
         return <span>
         <h2>Login</h2>
-        <form className='form-horizontal' method='POST' action={url('/auth')}>
+        <form className='form-horizontal'>
           <div className='form-group has-feedback'>
             <Input object={login} error={error} label='Username' name='username'
                    onChange={this.onInputChange}/>
             <Input object={login} error={error} label='Password' name='password'
-                   onChange={this.onInputChange}/>
+                   onChange={this.onInputChange} type='password'/>
           </div>
           <div className='form-group'>
             <div className='col-sm-offset-2 col-sm-10'>
