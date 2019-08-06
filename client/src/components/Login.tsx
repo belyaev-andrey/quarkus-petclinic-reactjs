@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {IUser, pushAuthUser, submitForm, url} from '../util';
+import {IUser, pushAuthUser, removeAuthUser, submitForm, url} from '../util';
 import Input from './form/Input';
 import {IError, IFieldError, ILogin, IOwner, IRouterContext} from '../types';
 
@@ -54,6 +54,11 @@ export default class LoginPage extends React.Component<ILoginProps, ILoginPageSt
         };
         console.log(user);
         pushAuthUser(user);
+        submitForm('POST', 'api/auth', null, ((respStatus, response) => {
+            if (respStatus !== 202) {
+                removeAuthUser();
+            }
+        }));
     }
 
 

@@ -30,6 +30,10 @@ export function pushAuthUser(user: IUser): void {
     localStorage.setItem('user', JSON.stringify(user));
 }
 
+export function removeAuthUser(): void {
+    localStorage.removeItem('user');
+}
+
 export const reqHeader = {
     headers: {
         'Accept': 'application/json;charset=utf-8',
@@ -48,14 +52,14 @@ export const submitForm = (method: IHttpMethod, path: string, data: any, onSucce
     const requestUrl = url(path);
 
     const fetchParams = {
+            headers: reqHeader.headers,
             method: method,
-            reqHeader,
             body: JSON.stringify
             (data)
         }
     ;
 
-    console.log('Submitting to ' + method + ' ' + requestUrl);
+    console.log('Submitting method ' + method + ' to ' + requestUrl);
     return fetch(requestUrl, fetchParams)
         .then(response => response.status === 204 ? onSuccess(response.status, {}) : response.json().then(result => onSuccess(response.status, result)));
 };
