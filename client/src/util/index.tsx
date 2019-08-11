@@ -17,12 +17,17 @@ export interface IUser {
 
 export function authHeader(): string {
     // return authorization header with basic auth credentials
-    let user = JSON.parse(localStorage.getItem('user'));
-
-    if (user && user.authdata) {
-        return 'Basic ' + user.authdata;
+    let item = localStorage.getItem('user');
+    console.log('User in storage: ' + item);
+    if (item) {
+        let user = JSON.parse(item);
+        if (user && user.authdata) {
+            return 'Basic ' + user.authdata;
+        } else {
+            return ''; // 'Basic YWRtaW46YWRtaW4=';
+        }
     } else {
-        return ''; // 'Basic YWRtaW46YWRtaW4=';
+        return '';
     }
 }
 
@@ -34,13 +39,15 @@ export function removeAuthUser(): void {
     localStorage.removeItem('user');
 }
 
-export const reqHeader = {
-    headers: {
+export function reqHeader(): RequestInit {
+    let header = {
         'Accept': 'application/json;charset=utf-8',
         'Content-Type': 'application/json;charset=utf-8',
         'Authorization': authHeader()
-    }
-};
+    };
+    return {headers: new Headers(header)};
+}
+
 
 /**
  * path: relative PATH without host and port (i.e. '/api/123')
@@ -52,14 +59,12 @@ export const submitForm = (method: IHttpMethod, path: string, data: any, onSucce
     const requestUrl = url(path);
 
     const fetchParams = {
-            headers: reqHeader.headers,
-            method: method,
-            body: JSON.stringify
-            (data)
-        }
-    ;
+        headers: reqHeader().headers,
+        method: method,
+        body: JSON.stringify
+        (data)
+    };
 
-    console.log('Submitting method ' + method + ' to ' + requestUrl);
     return fetch(requestUrl, fetchParams)
         .then(response => response.status === 204 ? onSuccess(response.status, {}) : response.json().then(result => onSuccess(response.status, result)));
 };

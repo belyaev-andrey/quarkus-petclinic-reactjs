@@ -29,7 +29,7 @@ export default class EditPetPage extends React.Component<IEditPetPageProps, IEdi
 
     const fetchUrl = url(`/api/owners/${params.ownerId}/pets/${params.petId}`);
 
-    const loadPetPromise = fetch(fetchUrl, reqHeader).then(response => response.json());
+    const loadPetPromise = fetch(fetchUrl, reqHeader()).then(response => response.json());
 
     createPetEditorModel(this.props.params.ownerId, loadPetPromise)
       .then(model => this.setState(model));

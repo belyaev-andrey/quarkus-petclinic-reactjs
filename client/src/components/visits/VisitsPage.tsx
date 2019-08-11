@@ -43,7 +43,7 @@ export default class VisitsPage extends React.Component<IVisitsPageProps, IVisit
     const { params } = this.props;
 
     if (params && params.ownerId) {
-      fetch(url(`/api/owner/${params.ownerId}`), reqHeader)
+      fetch(url(`/api/owner/${params.ownerId}`), reqHeader())
         .then(response => response.json())
         .then(owner => this.setState(
           {

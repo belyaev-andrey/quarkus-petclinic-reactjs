@@ -5,10 +5,10 @@ const toSelectOptions = (pettypes: IPetType[]): ISelectOption[] => pettypes.map(
 
 export default (ownerId: string, petLoaderPromise: Promise<any>): Promise<any> => {
   return Promise.all(
-    [fetch(url('/api/pettypes'), reqHeader)
+    [fetch(url('/api/pettypes'), reqHeader())
       .then(response => response.json())
       .then(toSelectOptions),
-    fetch(url('/api/owner/' + ownerId), reqHeader)
+    fetch(url('/api/owner/' + ownerId), reqHeader())
       .then(response => response.json()),
       petLoaderPromise,
     ]

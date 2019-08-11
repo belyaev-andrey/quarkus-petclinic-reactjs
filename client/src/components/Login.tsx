@@ -52,9 +52,11 @@ export default class LoginPage extends React.Component<ILoginProps, ILoginPageSt
             username : this.state.login.username,
             authdata : window.btoa(this.state.login.username + ':' + this.state.login.password)
         };
-        console.log(user);
+        removeAuthUser();
         pushAuthUser(user);
         submitForm('POST', '/api/auth', user, ((respStatus, response) => {
+            console.log(respStatus);
+            console.log(response);
             if (respStatus !== 202) {
                 removeAuthUser();
             }
