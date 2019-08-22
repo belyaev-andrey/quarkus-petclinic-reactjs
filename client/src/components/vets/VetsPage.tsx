@@ -20,11 +20,13 @@ export default class VetsPage extends React.Component<void, IVetsPageState> {
         const requestUrl = url('/api/vets');
         console.log('Fetching vets');
         fetch(requestUrl, reqHeader())
-            .then(response => response.json())
-            .then(vets => {
-                console.log('vets', vets);
-                this.setState({vets});
-            });
+            .then(response => response.json()
+                .then(vets => {
+                    console.log('vets', vets);
+                    this.setState({vets});
+                })).catch(reason => {
+            console.log('Error: ' + reason);
+        });
     }
 
     render() {

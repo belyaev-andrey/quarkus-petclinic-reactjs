@@ -1,4 +1,4 @@
-package io.quarkus.samples.petclinic.rest;
+package io.quarkus.samples.petclinic.rest.filters;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,8 +6,9 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
+import javax.ws.rs.ext.Provider;
 
-//@Provider
+@Provider
 public class CorsFilter implements ContainerResponseFilter {
 
     private static final Logger log = LoggerFactory.getLogger("CorsFilter");

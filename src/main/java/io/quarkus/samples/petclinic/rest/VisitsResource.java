@@ -35,6 +35,6 @@ public class VisitsResource {
         pet.addVisit(visit);
         Pet saved = clinicService.savePet(pet);
         URI uri = URI.create(String.format("/owners/%s/pets/%s/visits", pet.getOwner().getId(), pet.getId()));
-        return Response.ok(saved).location(uri).build();
+        return Response.status(Response.Status.CREATED).entity(saved).location(uri).build();
     }
 }

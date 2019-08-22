@@ -44,7 +44,7 @@ public class PetsResource {
         owner.addPet(pet);
         pet = clinicService.savePet(pet);
         URI uri = URI.create(String.format("/owners/%s/pets", owner.getId()));
-        return Response.ok(pet).location(uri).build();
+        return Response.status(Response.Status.CREATED).entity(pet).location(uri).build();
     }
 
     @PUT

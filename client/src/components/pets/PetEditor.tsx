@@ -64,7 +64,7 @@ export default class PetEditor extends React.Component<IPetEditorProps, IPetEdit
 
     const url = editablePet.isNew ? '/api/owners/' + owner.id + '/pets' :  '/api/owners/' + owner.id + '/pets/' + editablePet.id;
     submitForm(editablePet.isNew ? 'POST' : 'PUT', url, request, (status, response) => {
-      if (status === 204) {
+      if (status === 200 || status === 201) {
         this.context.router.push({
           pathname: '/owners/' + owner.id
         });

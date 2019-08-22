@@ -67,7 +67,7 @@ export default class VisitsPage extends React.Component<IVisitsPageProps, IVisit
 
     const url = '/api/owners/' + owner.id + '/pets/' + petId + '/visits';
     submitForm('POST', url, request, (status, response) => {
-      if (status === 204) {
+      if (status === 201) {
         this.context.router.push({
           pathname: '/owners/' + owner.id
         });
