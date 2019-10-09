@@ -17,7 +17,6 @@ package io.quarkus.samples.petclinic.model;
 
 import javax.persistence.Entity;
 import javax.persistence.NamedQuery;
-import javax.persistence.QueryHint;
 import javax.persistence.Table;
 
 /**
