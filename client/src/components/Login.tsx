@@ -33,12 +33,12 @@ export default class LoginPage extends React.Component<ILoginProps, ILoginPageSt
     }
 
     onInputChange(name: string, value: string, fieldError: IFieldError) {
-        const { login, error } = this.state;
-        const modifiedLogin = Object.assign({}, login, { [name]: value });
-        const newFieldErrors = error ? Object.assign({}, error.fieldErrors, {[name]: fieldError }) : {[name]: fieldError };
+        const {login, error} = this.state;
+        const modifiedLogin = Object.assign({}, login, {[name]: value});
+        const newFieldErrors = error ? Object.assign({}, error.fieldErrors, {[name]: fieldError}) : {[name]: fieldError};
         this.setState({
             login: modifiedLogin,
-            error: { fieldErrors: newFieldErrors }
+            error: {fieldErrors: newFieldErrors}
         });
     }
 
@@ -49,18 +49,23 @@ export default class LoginPage extends React.Component<ILoginProps, ILoginPageSt
     onSubmit(event) {
         event.preventDefault();
         let user = {
-            username : this.state.login.username,
-            authdata : window.btoa(this.state.login.username + ':' + this.state.login.password)
+            username: this.state.login.username,
+            authdata: window.btoa(this.state.login.username + ':' + this.state.login.password)
         };
         removeAuthUser();
         pushAuthUser(user);
         submitForm('POST', '/api/auth', user, ((respStatus, response) => {
-            console.log(respStatus);
-            console.log(response);
-            if (respStatus !== 202) {
-                removeAuthUser();
+            if (respStatus === 202) {
+                this.context.router.push({
+                    pathname: '/'
+                });
             }
-        }));
+        })).catch(reason => {
+            removeAuthUser();
+            this.context.router.push({
+                pathname: '/login'
+            });
+        });
     }
 
 
