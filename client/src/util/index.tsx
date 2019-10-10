@@ -5,13 +5,48 @@ const BACKEND_URL = (typeof __API_SERVER_URL__ === 'undefined' ? 'http://localho
 
 export const url = (path: string): string => `${BACKEND_URL}${path}`;
 
-export const reqHeader = {
-    headers: {
+export interface IHeaderElement {
+    key: string;
+    value: string;
+}
+
+export interface IUser {
+    username: string;
+    authdata: string;
+}
+
+export function authHeader(): string {
+    // return authorization header with basic auth credentials
+    let item = localStorage.getItem('user');
+    console.log('User in storage: ' + item);
+    if (item) {
+        let user = JSON.parse(item);
+        if (user && user.authdata) {
+            return 'Basic ' + user.authdata;
+        } else {
+            return ''; // 'Basic YWRtaW46YWRtaW4=';
+        }
+    } else {
+        return '';
+    }
+}
+
+export function pushAuthUser(user: IUser): void {
+    localStorage.setItem('user', JSON.stringify(user));
+}
+
+export function removeAuthUser(): void {
+    localStorage.removeItem('user');
+}
+
+export function reqHeader(): RequestInit {
+    let header = {
         'Accept': 'application/json;charset=utf-8',
         'Content-Type': 'application/json;charset=utf-8',
-        'authorization': 'Basic YWRtaW46YWRtaW4='
-    }
-};
+        'Authorization': authHeader()
+    };
+    return {headers: new Headers(header)};
+}
 
 
 /**
@@ -24,18 +59,12 @@ export const submitForm = (method: IHttpMethod, path: string, data: any, onSucce
     const requestUrl = url(path);
 
     const fetchParams = {
-            method: method,
-            headers: {
-                'Accept': 'application/json;charset=utf-8',
-                'Content-Type': 'application/json;charset=utf-8',
-                'authorization': 'Basic YWRtaW46YWRtaW4='
-            },
-            body: JSON.stringify
-            (data)
-        }
-    ;
+        headers: reqHeader().headers,
+        method: method,
+        body: JSON.stringify
+        (data)
+    };
 
-    console.log('Submitting to ' + method + ' ' + requestUrl);
     return fetch(requestUrl, fetchParams)
         .then(response => response.status === 204 ? onSuccess(response.status, {}) : response.json().then(result => onSuccess(response.status, result)));
 };

@@ -8,7 +8,6 @@ import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -34,12 +33,12 @@ public class OwnersResource {
     public Response addOwner(@Valid Owner owner) {
         owner = clinicService.saveOwner(owner);
         URI uri = URI.create(String.format("/api/owner/%s", owner.getId()));
-        return Response.ok(owner).location(uri).status(Response.Status.CREATED).build();
+        return Response.ok(owner).location(uri).build();
     }
 
     @GET
     @Path("/owner/{ownerId}")
-    @RolesAllowed(Roles.OWNER_ADMIN)
+    @RolesAllowed({Roles.OWNER_ADMIN, Roles.VET_ADMIN})
     public Response getOwner(@PathParam("ownerId") int ownerId) {
         Owner owner = null;
         owner = clinicService.findOwnerById(ownerId);
@@ -52,7 +51,7 @@ public class OwnersResource {
 
     @GET
     @Path("/owner/list")
-    @RolesAllowed(Roles.OWNER_ADMIN)
+    @RolesAllowed({Roles.OWNER_ADMIN, Roles.VET_ADMIN})
     public Response getOwnersList(@QueryParam("lastName") String ownerLastName) {
         if (ownerLastName == null) {
             ownerLastName = "";
@@ -78,7 +77,8 @@ public class OwnersResource {
         currentOwner.setLastName(owner.getLastName());
         currentOwner.setTelephone(owner.getTelephone());
         owner = clinicService.saveOwner(currentOwner);
-        return Response.ok(owner).build();
+        URI uri = URI.create(String.format("/api/owner/%s", owner.getId()));
+        return Response.ok(owner).location(uri).build();
     }
 
 }

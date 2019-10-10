@@ -3,9 +3,7 @@ package io.quarkus.samples.petclinic.service;
 import io.quarkus.samples.petclinic.model.Owner;
 import io.quarkus.samples.petclinic.model.Pet;
 import io.quarkus.samples.petclinic.model.PetType;
-import io.quarkus.samples.petclinic.model.Specialty;
 import io.quarkus.samples.petclinic.model.Vet;
-import io.quarkus.samples.petclinic.model.Visit;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

@@ -1,4 +1,6 @@
-package io.quarkus.samples.petclinic.rest;
+package io.quarkus.samples.petclinic.rest.mappers;
+
+import io.quarkus.samples.petclinic.rest.MediaTypes;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -8,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Provider
-public class ErrorMapper implements ExceptionMapper<WebApplicationException> {
+public class ApplicationErrorMapper implements ExceptionMapper<WebApplicationException> {
 
     @Override
     public Response toResponse(WebApplicationException exception) {
