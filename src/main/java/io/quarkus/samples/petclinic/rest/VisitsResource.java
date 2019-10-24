@@ -33,7 +33,7 @@ public class VisitsResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         pet.addVisit(visit);
-        Pet saved = clinicService.savePet(pet);
+        Pet saved = clinicService.updatePet(pet);
         URI uri = URI.create(String.format("/owners/%s/pets/%s/visits", pet.getOwner().getId(), pet.getId()));
         return Response.status(Response.Status.CREATED).entity(saved).location(uri).build();
     }
