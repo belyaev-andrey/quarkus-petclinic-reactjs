@@ -58,7 +58,7 @@ public class PetsResource {
         currentPet.setBirthDate(pet.getBirthDate());
         currentPet.setName(pet.getName());
         currentPet.setType(pet.getType());
-        pet = clinicService.savePet(currentPet);
+        pet = clinicService.updatePet(currentPet);
         URI uri = URI.create(String.format("/owners/%s/pets/%s", pet.getOwner().getId(), pet.getId()));
         return Response.ok(pet).location(uri).build();
     }

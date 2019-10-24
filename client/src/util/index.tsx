@@ -18,7 +18,6 @@ export interface IUser {
 export function authHeader(): string {
     // return authorization header with basic auth credentials
     let item = localStorage.getItem('user');
-    console.log('User in storage: ' + item);
     if (item) {
         let user = JSON.parse(item);
         if (user && user.authdata) {

@@ -36,10 +36,14 @@ public class ClinicService {
     }
 
     public Pet savePet(Pet pet) {
-        pet = em.merge(pet);
         em.persist(pet);
         return pet;
     }
+
+    public Pet updatePet(Pet pet) {
+        return em.merge(pet);
+    }
+
 
     public Collection<Owner> findOwnerByLastName(String ownerLastName) {
         return em.createNamedQuery("Owners.findByLastName", Owner.class)
@@ -53,8 +57,13 @@ public class ClinicService {
 
 
     public Owner saveOwner(Owner owner) {
-        owner = em.merge(owner);
         em.persist(owner);
         return owner;
     }
+
+    public Owner updateOwner(Owner owner) {
+        return em.merge(owner);
+    }
+
+
 }

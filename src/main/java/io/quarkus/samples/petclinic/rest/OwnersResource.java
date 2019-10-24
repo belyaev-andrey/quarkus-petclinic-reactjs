@@ -57,9 +57,6 @@ public class OwnersResource {
             ownerLastName = "";
         }
         Collection<Owner> owners = clinicService.findOwnerByLastName(ownerLastName);
-        if (owners.isEmpty()) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
         return Response.ok(owners).build();
     }
 
@@ -76,7 +73,7 @@ public class OwnersResource {
         currentOwner.setFirstName(owner.getFirstName());
         currentOwner.setLastName(owner.getLastName());
         currentOwner.setTelephone(owner.getTelephone());
-        owner = clinicService.saveOwner(currentOwner);
+        owner = clinicService.updateOwner(currentOwner);
         URI uri = URI.create(String.format("/api/owner/%s", owner.getId()));
         return Response.ok(owner).location(uri).build();
     }

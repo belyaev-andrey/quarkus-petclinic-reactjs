@@ -22,11 +22,11 @@ export default class VetsPage extends React.Component<void, IVetsPageState> {
         fetch(requestUrl, reqHeader())
             .then(response => response.json()
                 .then(vets => {
-                    console.log('vets', vets);
                     this.setState({vets});
-                })).catch(reason => {
-            console.log('Error: ' + reason);
-        });
+                }))
+            .catch(reason => {
+                console.log('Error: ' + reason);
+            });
     }
 
     render() {
