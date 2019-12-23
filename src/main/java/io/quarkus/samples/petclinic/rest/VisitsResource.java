@@ -27,14 +27,12 @@ public class VisitsResource {
     @POST
     @Path("/owners/{ownerId}/pets/{petId}/visits")
     @RolesAllowed({Roles.OWNER_ADMIN, Roles.VET_ADMIN})
-    public Response addVisit(@PathParam("petId") int petId, @Valid Visit visit){
-        final Pet pet = clinicService.findPetById(petId);
+    public Response addVisit(@PathParam("petId") long petId, @Valid Visit visit){
+        Pet pet = clinicService.addVisit(petId, visit);
         if (pet == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        pet.addVisit(visit);
-        Pet saved = clinicService.updatePet(pet);
         URI uri = URI.create(String.format("/owners/%s/pets/%s/visits", pet.getOwner().getId(), pet.getId()));
-        return Response.status(Response.Status.CREATED).entity(saved).location(uri).build();
+        return Response.status(Response.Status.CREATED).entity(pet).location(uri).build();
     }
 }

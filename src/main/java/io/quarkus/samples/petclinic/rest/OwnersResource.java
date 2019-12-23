@@ -39,9 +39,8 @@ public class OwnersResource {
     @GET
     @Path("/owner/{ownerId}")
     @RolesAllowed({Roles.OWNER_ADMIN, Roles.VET_ADMIN})
-    public Response getOwner(@PathParam("ownerId") int ownerId) {
-        Owner owner = null;
-        owner = clinicService.findOwnerById(ownerId);
+    public Response getOwner(@PathParam("ownerId") long ownerId) {
+        Owner owner = clinicService.findOwnerById(ownerId);
         if (owner == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
@@ -63,17 +62,11 @@ public class OwnersResource {
     @PUT
     @Path("/owner/{ownerId}")
     @RolesAllowed(Roles.OWNER_ADMIN)
-    public Response updateOwner(@PathParam("ownerId") int ownerId, @Valid Owner owner) {
-        Owner currentOwner = clinicService.findOwnerById(ownerId);
-        if (currentOwner == null) {
+    public Response updateOwner(@PathParam("ownerId") long ownerId, @Valid Owner owner) {
+        owner = clinicService.updateOwner(ownerId, owner);
+        if (owner == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        currentOwner.setAddress(owner.getAddress());
-        currentOwner.setCity(owner.getCity());
-        currentOwner.setFirstName(owner.getFirstName());
-        currentOwner.setLastName(owner.getLastName());
-        currentOwner.setTelephone(owner.getTelephone());
-        owner = clinicService.updateOwner(currentOwner);
         URI uri = URI.create(String.format("/api/owner/%s", owner.getId()));
         return Response.ok(owner).location(uri).build();
     }

@@ -15,13 +15,13 @@
  */
 package io.quarkus.samples.petclinic.model;
 
+import io.quarkus.panache.common.Sort;
+
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
@@ -42,10 +42,6 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "owners")
-@NamedQueries({
-        @NamedQuery(name = "Owners.findAll", query = "select o from Owner o order by o.lastName"),
-        @NamedQuery(name = "Owners.findByLastName", query = "select o from Owner o where lower(o.lastName) like lower(concat(:lastName, '%')) order by o.lastName")
-})
 public class Owner extends Person {
     @Column(name = "address")
     @NotNull
@@ -138,6 +134,10 @@ public class Owner extends Person {
             }
         }
         return null;
+    }
+
+    public static List<Owner> findByLastName(String lastName) {
+        return find("lower(lastName) like lower(concat(?1, '%')) ", Sort.ascending("lastName"), lastName).list();
     }
 
     @Override

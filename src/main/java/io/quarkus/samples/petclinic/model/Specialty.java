@@ -16,7 +16,6 @@
 package io.quarkus.samples.petclinic.model;
 
 import javax.persistence.Entity;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
@@ -26,13 +25,12 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "specialties")
-@NamedQuery(name = "Specialties.findAll", query = "SELECT s FROM Specialty s ORDER BY s.name")
 public class Specialty extends NamedEntity {
 
     public Specialty() {
     }
 
-    public Specialty(Integer id, String name) {
+    public Specialty(Long id, String name) {
         super.setId(id);
         super.setName(name);
     }

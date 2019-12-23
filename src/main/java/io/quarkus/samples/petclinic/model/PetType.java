@@ -16,8 +16,6 @@
 package io.quarkus.samples.petclinic.model;
 
 import javax.persistence.Entity;
-import javax.persistence.NamedQuery;
-import javax.persistence.QueryHint;
 import javax.persistence.Table;
 
 /**
@@ -26,13 +24,12 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "types")
-@NamedQuery(name = "PetTypes.findAll", query = "SELECT t FROM PetType t ORDER BY t.name")
 public class PetType extends NamedEntity {
 
     public PetType() {
     }
 
-    public PetType(Integer id, String name) {
+    public PetType(Long id, String name) {
         super.setId(id);
         super.setName(name);
     }

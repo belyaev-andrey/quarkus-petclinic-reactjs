@@ -1,13 +1,13 @@
 package io.quarkus.samples.petclinic.service;
 
+import io.quarkus.panache.common.Sort;
 import io.quarkus.samples.petclinic.model.Owner;
 import io.quarkus.samples.petclinic.model.Pet;
 import io.quarkus.samples.petclinic.model.PetType;
 import io.quarkus.samples.petclinic.model.Vet;
+import io.quarkus.samples.petclinic.model.Visit;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.List;
@@ -16,53 +16,71 @@ import java.util.List;
 @Transactional
 public class ClinicService {
 
-    @Inject
-    EntityManager em;
-
     public List<PetType> findAllPetTypes() {
-        return em.createNamedQuery("PetTypes.findAll", PetType.class).getResultList();
+        return PetType.listAll();
     }
 
-    public PetType findPetTypeById(Integer petTypeId) {
-        return em.find(PetType.class, petTypeId);
+    public PetType findPetTypeById(Long petTypeId) {
+        return PetType.findById(petTypeId);
     }
 
     public Collection<Vet> findAllVets() {
-        return em.createNamedQuery("Vets.findAll", Vet.class).getResultList();
+        return Vet.findAll(Sort.ascending("firstName")).list();
     }
 
-    public Pet findPetById(Integer petId) {
-        return em.find(Pet.class, petId);
+    public Pet findPetById(Long petId) {
+        return Pet.findById(petId);
     }
 
     public Pet savePet(Pet pet) {
-        em.persist(pet);
+        pet.persist();
         return pet;
     }
 
-    public Pet updatePet(Pet pet) {
-        return em.merge(pet);
+    public Pet addVisit(long petId, Visit visit) {
+        Pet currentPet = findPetById(petId);
+        if (currentPet == null) {
+            return null;
+        }
+        currentPet.addVisit(visit);
+        return currentPet;
+    }
+
+
+    public Pet updatePet(long petId, Pet pet) {
+        Pet currentPet = findPetById(petId);
+        if (currentPet == null) {
+            return null;
+        }
+        currentPet.setBirthDate(pet.getBirthDate());
+        currentPet.setName(pet.getName());
+        currentPet.setType(pet.getType());
+        return currentPet;
     }
 
 
     public Collection<Owner> findOwnerByLastName(String ownerLastName) {
-        return em.createNamedQuery("Owners.findByLastName", Owner.class)
-                .setParameter("lastName", ownerLastName)
-                .getResultList();
+        return Owner.findByLastName(ownerLastName);
     }
 
-    public Owner findOwnerById(Integer ownerId) {
-        return em.find(Owner.class, ownerId);
+    public Owner findOwnerById(Long ownerId) {
+        return Owner.findById(ownerId);
     }
 
 
     public Owner saveOwner(Owner owner) {
-        em.persist(owner);
+        owner.persist();
         return owner;
     }
 
-    public Owner updateOwner(Owner owner) {
-        return em.merge(owner);
+    public Owner updateOwner(long ownerId, Owner owner) {
+        Owner currentOwner = findOwnerById(ownerId);
+        currentOwner.setAddress(owner.getAddress());
+        currentOwner.setCity(owner.getCity());
+        currentOwner.setFirstName(owner.getFirstName());
+        currentOwner.setLastName(owner.getLastName());
+        currentOwner.setTelephone(owner.getTelephone());
+        return currentOwner;
     }
 
 

@@ -22,9 +22,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlElement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -41,7 +39,6 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "vets")
-@NamedQuery(name = "Vets.findAll", query = "SELECT v FROM Vet v ORDER BY v.lastName")
 public class Vet extends Person {
 
     @ManyToMany(fetch = FetchType.EAGER)

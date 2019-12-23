@@ -15,10 +15,9 @@
  */
 package io.quarkus.samples.petclinic.model;
 
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
+
 import javax.json.bind.annotation.JsonbTransient;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 /**
@@ -28,16 +27,13 @@ import javax.persistence.MappedSuperclass;
  * @author Juergen Hoeller
  */
 @MappedSuperclass
-public class BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Integer id;
+public class BaseEntity extends PanacheEntity {
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

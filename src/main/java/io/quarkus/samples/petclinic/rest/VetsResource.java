@@ -24,7 +24,7 @@ public class VetsResource {
     @GET
     @Path("/vets")
     @RolesAllowed(Roles.VET_ADMIN)
-    public Response getAllSpecialtys() {
+    public Response getAllSpecialties() {
         Collection<Vet> vets = clinicService.findAllVets();
         if (vets.isEmpty()) {
             return Response.status(Response.Status.NOT_FOUND).build();
